@@ -1,54 +1,51 @@
 import GameFeed from "./components/GameFeed";
-import Header from "./components/header"
+import Header from "./components/header";
 import { AuthProvider } from "./components/AuthContext";
+import { SearchBar } from "./components/barrabusqueda";
 import "./App.css";
+import { useState } from "react";
 
-import { useState } from 'react';
-import { SearchBar } from './components/barrabusqueda';
-import './App.css';
-
-// Datos de ejemplo
+// Datos del buscador de Dylan
 const SAMPLE_ITEMS = [
-  { name: 'React', description: 'Biblioteca JavaScript' },
-  { name: 'Vue', description: 'Framework progresivo' },
-  { name: 'Angular', description: 'Framework completo' },
-  { name: 'Svelte', description: 'Compilador de componentes' },
-  { name: 'Next.js', description: 'Framework de React' },
-  { name: 'Nuxt', description: 'Framework de Vue' },
-  { name: 'Astro', description: 'SSR moderno' },
-  { name: 'Node.js', description: 'Runtime JavaScript' },
-  { name: 'TypeScript', description: 'JavaScript tipado' },
-  { name: 'Webpack', description: 'Bundler de módulos' },
+  { name: "React",      description: "Biblioteca JavaScript" },
+  { name: "Vue",        description: "Framework progresivo" },
+  { name: "Angular",    description: "Framework completo" },
+  { name: "Svelte",     description: "Compilador de componentes" },
+  { name: "Next.js",    description: "Framework de React" },
+  { name: "Nuxt",       description: "Framework de Vue" },
+  { name: "Astro",      description: "SSR moderno" },
+  { name: "Node.js",    description: "Runtime JavaScript" },
+  { name: "TypeScript", description: "JavaScript tipado" },
+  { name: "Webpack",    description: "Bundler de módulos" },
 ];
 
 function App() {
   const [searchResults, setSearchResults] = useState([]);
-  const [lastSearch, setLastSearch] = useState('');
+  const [lastSearch,    setLastSearch]    = useState("");
 
   const handleSearch = (results, searchTerm) => {
     setSearchResults(results);
     setLastSearch(searchTerm);
   };
 
+  // Un solo return fusionando todo
   return (
-    <div className="app-container">
-      <header className="app-header">
-        <h1>Mi Aplicación</h1>
-        <p className="subtitle">Prueba la barra de búsqueda</p>
-      </header>
+    <AuthProvider>
+      <div className="app">
 
-      <main className="app-main">
-        <section className="search-section">
-          <SearchBar
-            items={SAMPLE_ITEMS}
-            onSearch={handleSearch}
-            placeholder="Busca tecnologías..."
-          />
-        </section>
+        {/* Barra superior - Jesús */}
+        <Header className="app__header-placeholder" />
 
+        {/* Buscador - Dylan */}
+        <SearchBar
+          items={SAMPLE_ITEMS}
+          onSearch={handleSearch}
+          placeholder="Busca juegos..."
+        />
+
+        {/* Resultados del buscador (si hay búsqueda activa) */}
         {lastSearch && (
-          <section className="results-section">
-            <h2>Resultados de búsqueda</h2>
+          <div className="results-section">
             {searchResults.length > 0 ? (
               <div className="results-grid">
                 {searchResults.map((item, index) => (
@@ -61,20 +58,14 @@ function App() {
             ) : (
               <p className="no-results-message">No se encontraron resultados</p>
             )}
-          </section>
+          </div>
         )}
-      </main>
-    </div>
-  return (
-    <AuthProvider>
-      <div className="app">
-        <Header className="app__header-placeholder" />
 
-        <div className="app__body">
-          <main className="app__main">
-            <GameFeed />
-          </main>
-        </div>
+        {/* Feed de juegos - Juliana/Tomás */}
+        <main className="app__main">
+          <GameFeed />
+        </main>
+
       </div>
     </AuthProvider>
   );
