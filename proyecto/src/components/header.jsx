@@ -1,8 +1,12 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import './header.css'
+import LoginModal from './LoginModal'
+import { AuthContext } from './AuthContext'
 
 function Header() {
     const [menuOpen, setMenuOpen] = useState(false);
+    const [loginModalOpen, setLoginModalOpen] = useState(false);
+    const { user, logout } = useContext(AuthContext);
 
     const menuItems = [
         { name: "Juegos nuevos", icon: "https://s3.minijuegosgratis.com/media/icons/navbar/icon-navbar-new-color.svg" },
@@ -44,12 +48,10 @@ function Header() {
         { name: "Estrategia", icon: "https://s3.minijuegosgratis.com/media/icons/categories/svg/navbar/icon-cat-strategy.svg" }
     ]
 
-
     return (
         <>
             <header className="header">
                 <nav className="nav">
-
                     <div className="nav-left">
                         <button className="menu-btn" onClick={() => setMenuOpen(!menuOpen)}></button>
                         <img src="https://s3.minijuegosgratis.com/media/brand/minijuegos-logo.png?v=_1772347909" alt="Minijuegos" />
@@ -60,11 +62,20 @@ function Header() {
                     </div>
 
                     <div className="nav-right">
-                        <button className="login-btn"></button>
+                        {user ? (
+                            <div className="user-menu">
+                                <span className="user-name">{user.name}</span>
+                                <button className="logout-btn" onClick={logout}>Cerrar sesión</button>
+                            </div>
+                        ) : (
+                            <button 
+                                className="login-btn"
+                                onClick={() => setLoginModalOpen(true)}
+                            ></button>
+                        )}
                     </div>
-
                 </nav>
-            </header >
+            </header>
 
             <nav className={`menu-lateral ${menuOpen ? "open" : ""}`}>
                 <ul>
@@ -78,6 +89,11 @@ function Header() {
                     ))}
                 </ul>
             </nav>
+
+            <LoginModal 
+                isOpen={loginModalOpen}
+                onClose={() => setLoginModalOpen(false)}
+            />
         </>
     )
 }
